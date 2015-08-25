@@ -334,6 +334,11 @@ public class Calculadora extends javax.swing.JFrame {
             
             String[] numbers;
             
+            String datos = pantalla.getText();
+            
+            if(datos.contains("+")){
+                numbers = datos.split("+");
+            }
             
             
             
