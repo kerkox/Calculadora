@@ -19,8 +19,10 @@ public class Calculadora extends javax.swing.JFrame {
      * Creates new form Calculadora
      */
     boolean allowPoint = true;
+    String[] operando = {"\\+", "-", "\\*", "/"};
+    String[] operadores = {"+", "-", "*", "/"};
     String calculo = "";
-    float a=0, b=0, resultado=0;
+    float a = 0, b = 0, resultado = 0;
 
     public Calculadora() {
         initComponents();
@@ -45,7 +47,36 @@ public class Calculadora extends javax.swing.JFrame {
         //*****************************************
         ManejadorPunto mp = new ManejadorPunto();
         this.botonPunto.addActionListener(mp);
+        //*****************************************
+        ManejadorResultado mr = new ManejadorResultado();
+        this.botonIgual.addActionListener(mr);
+        //*****************************************
+        ManejadorClear mc = new ManejadorClear();
+        this.clear.addActionListener(mc);
+    }
 
+    /**
+     *
+     * @param formula un string donde esta la operacion
+     * @return en el indice 0 el tipo de operador en el indice 1 le indice de
+     * donde se encuentra el operador
+     */
+    public int[] operacion(String formula) {
+
+        int pos = -1, operador = -1;
+        //Aqui se busca el operador que hay en la pantalla
+        for (int i = 0; i < 4; i++) {
+            if (formula.contains(operadores[i])) {
+                operador = i;
+                break;
+            }
+
+        }
+        if (operador != -1) {
+            pos = formula.indexOf(operadores[operador]);
+        }
+        int[] datos = {operador, pos};
+        return datos;
     }
 
     /**
@@ -74,6 +105,9 @@ public class Calculadora extends javax.swing.JFrame {
         botonPunto = new javax.swing.JButton();
         botonIgual = new javax.swing.JButton();
         boton0 = new javax.swing.JButton();
+        clear = new javax.swing.JButton();
+        signo = new javax.swing.JButton();
+        Delete = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -129,6 +163,15 @@ public class Calculadora extends javax.swing.JFrame {
         boton0.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         boton0.setText("0");
 
+        clear.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        clear.setText("C");
+
+        signo.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        signo.setText("+/-");
+
+        Delete.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        Delete.setText("Del");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -146,7 +189,9 @@ public class Calculadora extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(boton9, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(botonDivi, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(botonDivi, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(clear, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(boton1, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -154,7 +199,9 @@ public class Calculadora extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(boton3, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(botonResta, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(botonResta, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(Delete, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(boton4, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -162,7 +209,9 @@ public class Calculadora extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(boton6, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(botonMulti, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(botonMulti, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(signo, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(boton0, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -191,19 +240,24 @@ public class Calculadora extends javax.swing.JFrame {
                         .addComponent(boton9, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(62, 62, 62)
-                        .addComponent(botonDivi, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(botonDivi, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(62, 62, 62)
+                        .addComponent(clear, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(boton4, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(boton5, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(boton6, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(botonMulti, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(botonMulti, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(signo, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(boton1, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(boton2, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(boton3, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(botonResta, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(botonResta, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Delete, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(boton0, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -252,6 +306,7 @@ public class Calculadora extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton Delete;
     private javax.swing.JButton boton0;
     private javax.swing.JButton boton1;
     private javax.swing.JButton boton2;
@@ -268,7 +323,9 @@ public class Calculadora extends javax.swing.JFrame {
     private javax.swing.JButton botonPunto;
     private javax.swing.JButton botonResta;
     private javax.swing.JButton botonSuma;
+    private javax.swing.JButton clear;
     private javax.swing.JTextField pantalla;
+    private javax.swing.JButton signo;
     // End of variables declaration//GEN-END:variables
     /**
      * Clase de Manejador de Numeros y el punto
@@ -280,16 +337,18 @@ public class Calculadora extends javax.swing.JFrame {
 
             JButton btn = (JButton) e.getSource();
             String n = pantalla.getText();
+            
+            
+                if (n.equals("0")) {
 
-            if (n.equals("0")) {
+                    pantalla.setText(btn.getText());
 
-                pantalla.setText(btn.getText());
+                } else {
+                    pantalla.setText(n + btn.getText());
 
-            } else {
-                pantalla.setText(n + btn.getText());
+                }
 
-            }
-
+            
         }
 
     }
@@ -301,81 +360,82 @@ public class Calculadora extends javax.swing.JFrame {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-
-            //*********************************
-            //calculo anterior
-            int pos=0;
-            String[] datas={};
-            JButton btn = (JButton) e.getSource();
-            boolean ultimo = false;
-            calculo = pantalla.getText();
-            if(calculo.contains("+")||calculo.contains("-")||calculo.contains("*")||calculo.contains("/")){
-//                calculo = pantalla.getText();
-                ultimo = true;
-            }else{
-                calculo = pantalla.getText() + btn.getText();    
-            }
-            
-            //*********************************
-            if(calculo.contains("+")){
-                pos = calculo.indexOf("+")+1;
-                if(calculo.length()==pos){
-                    
-                    a = Float.parseFloat(calculo.replace("+", ""));
-                    
-                }else{
-                    System.out.println("valor de calculo: "+ calculo);
-                    datas = calculo.split("\\+");
-                    System.out.println("El error No esta contenido en el split");
-                    b = Float.parseFloat(datas[1]);
-                    resultado = a +b;
-                    calculo = resultado+"";
-                }
-            }else if(calculo.contains("-")){
-                pos = calculo.indexOf("-")+1;
-                if(calculo.length()==pos){
-                    a = Float.parseFloat(calculo.replace("-", ""));
-                }else{
-                    datas = calculo.split("-");
-                    b = Float.parseFloat(datas[1]);
-                    resultado = a -b;
-                    calculo = resultado+"";
-                }
-                    
-            }else if(calculo.contains("*")){
-                pos = calculo.indexOf("*")+1;
-                if(calculo.length()==pos){
-                    a = Float.parseFloat(calculo.replace("*", ""));
-                }else{
-                    datas = calculo.split("\\*");
-                    b = Float.parseFloat(datas[1]);
-                    resultado = a *b;
-                    calculo = resultado+"";
-                }
-            }else if(calculo.contains("/")){
-                pos = calculo.indexOf("/")+1;
-                if(calculo.length()==pos){
-                    a = Float.parseFloat(pantalla.getText().replace("/", ""));
-                }else{
-                    datas = calculo.split("/");
-                    b = Float.parseFloat(datas[1]);
-                    resultado = a/b;
-                    calculo = resultado+"";
-                }
-            }
-            
-            if(ultimo){
-                calculo += btn.getText();
                 
-            }
-            
-            System.out.println("valor de a: "+ a );
-            System.out.println("valor de b: "+ b );
-            System.out.println("valor de resultado: "+ resultado  );
-            
-            pantalla.setText(calculo);
-            allowPoint = true;
+           
+                //*********************************
+                //calculo anterior
+                int pos = 0;
+                String[] datas = {};
+                JButton btn = (JButton) e.getSource();
+                boolean ultimo = false;
+                calculo = pantalla.getText();
+                if (calculo.contains("+") || calculo.contains("-") || calculo.contains("*") || calculo.contains("/")) {
+//                calculo = pantalla.getText();
+                    ultimo = true;
+                } else {
+                    calculo = pantalla.getText() + btn.getText();
+                }
 
+                //*********************************
+                if (calculo.contains("+")) {
+                    pos = calculo.indexOf("+") + 1;
+                    if (calculo.length() == pos) {
+
+                        a = Float.parseFloat(calculo.replace("+", ""));
+
+                    } else {
+                        datas = calculo.split("\\+");
+                        b = Float.parseFloat(datas[1]);
+                        a += b;
+                        calculo = a + "";
+                    }
+                } else if (calculo.contains("-")) {
+                    pos = calculo.indexOf("-") + 1;
+                    if (calculo.length() == pos) {
+                        a = Float.parseFloat(calculo.replace("-", ""));
+                    } else {
+                        datas = calculo.split("-");
+                        b = Float.parseFloat(datas[1]);
+                        a -= b;
+                        calculo = a + "";
+                    }
+
+                } else if (calculo.contains("*")) {
+                    pos = calculo.indexOf("*") + 1;
+                    if (calculo.length() == pos) {
+                        a = Float.parseFloat(calculo.replace("*", ""));
+                    } else {
+                        datas = calculo.split("\\*");
+                        b = Float.parseFloat(datas[1]);
+                        a *= b;
+                        calculo = a + "";
+                    }
+                } else if (calculo.contains("/")) {
+                    pos = calculo.indexOf("/") + 1;
+                    if (calculo.length() == pos) {
+                        a = Float.parseFloat(pantalla.getText().replace("/", ""));
+                    } else {
+                        datas = calculo.split("/");
+                        b = Float.parseFloat(datas[1]);
+                        if (b == 0) {
+                            pantalla.setText("No se puede Divir entre 0 ");
+                        } else {
+
+                            a /= b;
+                            calculo = a + "";
+                        }
+                    }
+                }
+
+                if (ultimo) {
+                    calculo += btn.getText();
+
+                }
+
+                pantalla.setText(calculo);
+                allowPoint = true;
+
+            
         }
 
     }
@@ -387,28 +447,99 @@ public class Calculadora extends javax.swing.JFrame {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-
+            String oper = "";
             JButton btn = (JButton) e.getSource();
-            if (allowPoint) {
-                pantalla.setText(pantalla.getText() + btn.getText());
-                allowPoint = false;
-            }
+            
+                int[] info = operacion(oper);
+                int pos = info[1];
+                if (allowPoint) {
+                    
+                        oper += "0" + btn.getText();
+                    } else {
+                        oper += btn.getText();
+                    }
 
+                    pantalla.setText(oper);
+                    allowPoint = false;
+                }
+            
         }
 
-    }
+    
 
     public class ManejadorResultado implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
+            allowPoint = true; // para permitir el punto
+            calculo = pantalla.getText();
+
+            if (calculo.charAt(calculo.length() - 1) == '.') {
+                calculo = calculo.replace(".", "");
+
+            }
+
+            String[] datas;
+            int pos, operador;
+            int[] oper = operacion(calculo);
+
+            operador = oper[0];
+            pos = oper[1];
+            //Aqui se busca el operador que hay en la pantalla
+
+            //aqui se evalua si el operador es lo ultimo
+            //si es asi entonces solo se deja el valor que esta sin el operador
+            //sino se hace la ultima operacion
+            if (operador != -1) {
+
+                if (calculo.length() == (pos + 1)) {
+                    calculo = calculo.replace(operadores[operador], "");
+                } else {
+
+                    datas = calculo.split(operando[operador]);
+
+                    a = Float.parseFloat(datas[0]);
+                    b = Float.parseFloat(datas[1]);
+
+                    switch (operador) {
+                        case 0:
+                            a += b;
+                            break;
+                        case 1:
+                            a -= b;
+                            break;
+                        case 2:
+                            a *= b;
+                            break;
+                        case 3:
+                            a /= b;
+                            break;
+                    }
+                    calculo = a + "";
+
+                }
+
+            }
 
             pantalla.setText(calculo);
-
-                
-
+            
         }
+        
 
     }
 
+    public class ManejadorClear implements ActionListener{
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            //Reinicio de todas las variables
+            pantalla.setText("");
+            a =0;
+            b=0;
+            resultado=0;
+            calculo="";
+            allowPoint = true;
+        }
+        
+    }
 }
