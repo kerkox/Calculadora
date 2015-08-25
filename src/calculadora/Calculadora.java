@@ -22,7 +22,7 @@ public class Calculadora extends javax.swing.JFrame {
     String[] operando = {"\\+", "-", "\\*", "/"};
     String[] operadores = {"+", "-", "*", "/"};
     String calculo = "";
-    float a = 0, b = 0, resultado = 0;
+    double a = 0, b = 0, resultado = 0;
 
     public Calculadora() {
         initComponents();
@@ -58,8 +58,7 @@ public class Calculadora extends javax.swing.JFrame {
     /**
      *
      * @param formula un string donde esta la operacion
-     * @return en el indice 0 el tipo de operador en el indice 1 le indice de
-     * donde se encuentra el operador
+     * @return operador en el indice 0 posicion en el indice 1
      */
     public int[] operacion(String formula) {
 
@@ -337,18 +336,16 @@ public class Calculadora extends javax.swing.JFrame {
 
             JButton btn = (JButton) e.getSource();
             String n = pantalla.getText();
-            
-            
-                if (n.equals("0")) {
 
-                    pantalla.setText(btn.getText());
+            if (n.equals("0")) {
 
-                } else {
-                    pantalla.setText(n + btn.getText());
+                pantalla.setText(btn.getText());
 
-                }
+            } else {
+                pantalla.setText(n + btn.getText());
 
-            
+            }
+
         }
 
     }
@@ -360,63 +357,50 @@ public class Calculadora extends javax.swing.JFrame {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-                
-           
-                //*********************************
-                //calculo anterior
-                int pos = 0;
-                String[] datas = {};
-                JButton btn = (JButton) e.getSource();
-                boolean ultimo = false;
-                calculo = pantalla.getText();
-                if (calculo.contains("+") || calculo.contains("-") || calculo.contains("*") || calculo.contains("/")) {
+
+            //*********************************
+            //calculo anterior
+            int pos = 0, oper = 0;
+            double tmp = 0;
+            String[] datas = {};
+            JButton btn = (JButton) e.getSource();
+            boolean ultimo = false;
+            calculo = pantalla.getText();
+            if (calculo.contains("+") || calculo.contains("-") || calculo.contains("*") || calculo.contains("/")) {
 //                calculo = pantalla.getText();
-                    ultimo = true;
-                } else {
-                    calculo = pantalla.getText() + btn.getText();
-                }
+                ultimo = true;
+            } else {
+                calculo = pantalla.getText() + btn.getText();
+            }
 
-                //*********************************
-                if (calculo.contains("+")) {
-                    pos = calculo.indexOf("+") + 1;
-                    if (calculo.length() == pos) {
+            //*********************************
+            int[] data = operacion(calculo);
+            oper = data[0];
+            pos = data[1];
+            if (calculo.length() == (pos+1)) {
+                a = Float.parseFloat(calculo.replace(operadores[oper], ""));
+            } else {
+                datas = calculo.split(operando[oper]);
+                b = Float.parseFloat(datas[1]);
 
-                        a = Float.parseFloat(calculo.replace("+", ""));
 
-                    } else {
-                        datas = calculo.split("\\+");
-                        b = Float.parseFloat(datas[1]);
+                switch (oper) {
+                    case 0:
                         a += b;
                         calculo = a + "";
-                    }
-                } else if (calculo.contains("-")) {
-                    pos = calculo.indexOf("-") + 1;
-                    if (calculo.length() == pos) {
-                        a = Float.parseFloat(calculo.replace("-", ""));
-                    } else {
-                        datas = calculo.split("-");
-                        b = Float.parseFloat(datas[1]);
+
+                        break;
+                    case 1:
                         a -= b;
                         calculo = a + "";
-                    }
 
-                } else if (calculo.contains("*")) {
-                    pos = calculo.indexOf("*") + 1;
-                    if (calculo.length() == pos) {
-                        a = Float.parseFloat(calculo.replace("*", ""));
-                    } else {
-                        datas = calculo.split("\\*");
-                        b = Float.parseFloat(datas[1]);
+                        break;
+                    case 2:
                         a *= b;
                         calculo = a + "";
-                    }
-                } else if (calculo.contains("/")) {
-                    pos = calculo.indexOf("/") + 1;
-                    if (calculo.length() == pos) {
-                        a = Float.parseFloat(pantalla.getText().replace("/", ""));
-                    } else {
-                        datas = calculo.split("/");
-                        b = Float.parseFloat(datas[1]);
+
+                        break;
+                    case 3:
                         if (b == 0) {
                             pantalla.setText("No se puede Divir entre 0 ");
                         } else {
@@ -424,18 +408,24 @@ public class Calculadora extends javax.swing.JFrame {
                             a /= b;
                             calculo = a + "";
                         }
-                    }
-                }
 
-                if (ultimo) {
+                        break;
+
+                }
+            }
+
+//                //*****************************************
+            if (ultimo) {
+                if (calculo.contains("+") || calculo.contains("-") || calculo.contains("*") || calculo.contains("/")) {
+                    calculo = calculo.substring(0, calculo.length() - 2) + btn.getText();
+                } else {
                     calculo += btn.getText();
-
                 }
+            }
 
-                pantalla.setText(calculo);
-                allowPoint = true;
+            pantalla.setText(calculo);
+            allowPoint = true;
 
-            
         }
 
     }
@@ -449,29 +439,40 @@ public class Calculadora extends javax.swing.JFrame {
         public void actionPerformed(ActionEvent e) {
             String oper = "";
             JButton btn = (JButton) e.getSource();
-            
-                int[] info = operacion(oper);
-                int pos = info[1];
-                if (allowPoint) {
-                    
-                        oper += "0" + btn.getText();
-                    } else {
-                        oper += btn.getText();
-                    }
-
-                    pantalla.setText(oper);
-                    allowPoint = false;
+            oper = pantalla.getText();
+            if(oper.equals("0")){
+                if (allowPoint) {    
+                    oper += btn.getText();
                 }
+            }else{
             
+            if (allowPoint) {
+                if(oper.equals("")){
+                    oper = "0" + btn.getText();
+                }else{
+                    int[] data = operacion(oper);
+                    int pos = data[1];
+                    if(oper.length()==(pos+1)){
+                           oper += "0"+btn.getText();
+                    }else{
+                    oper += btn.getText();
+                }
+                }
+                
+            } 
+            }
+            
+            pantalla.setText(oper);
+            allowPoint = false;
+        
         }
-
-    
+    }
 
     public class ManejadorResultado implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            allowPoint = true; // para permitir el punto
+            allowPoint = false; // ya que la respuesta trae punto
             calculo = pantalla.getText();
 
             if (calculo.charAt(calculo.length() - 1) == '.') {
@@ -522,24 +523,23 @@ public class Calculadora extends javax.swing.JFrame {
             }
 
             pantalla.setText(calculo);
-            
+
         }
-        
 
     }
 
-    public class ManejadorClear implements ActionListener{
+    public class ManejadorClear implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
             //Reinicio de todas las variables
             pantalla.setText("");
-            a =0;
-            b=0;
-            resultado=0;
-            calculo="";
+            a = 0;
+            b = 0;
+            resultado = 0;
+            calculo = "";
             allowPoint = true;
         }
-        
+
     }
 }
