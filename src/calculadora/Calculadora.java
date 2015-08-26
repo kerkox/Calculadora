@@ -7,6 +7,7 @@ package calculadora;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.math.BigDecimal;
 import javax.swing.JButton;
 
 /**
@@ -22,9 +23,10 @@ public class Calculadora extends javax.swing.JFrame {
     String[] operando = {"\\+", "-", "\\*", "/"};
     String[] operadores = {"+", "-", "*", "/"};
     String calculo = "";
-    double a = 0, b = 0, resultado = 0;
-
+    double a = 0, b = 0, resultado ;
+    
     public Calculadora() {
+        
         initComponents();
         ManejadorNumeros mn = new ManejadorNumeros();
         this.boton0.addActionListener(mn);
@@ -522,7 +524,7 @@ public class Calculadora extends javax.swing.JFrame {
 
             }
 
-            pantalla.setText(calculo);
+            pantalla.setText(calculo.substring(0, calculo.indexOf(".") + 7));
 
         }
 
