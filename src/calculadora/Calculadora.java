@@ -84,6 +84,9 @@ public class Calculadora extends javax.swing.JFrame {
         //*****************************************
         ManejadorDelete md = new ManejadorDelete();
         this.Delete.addActionListener(md);
+        //*****************************************
+        ManejadorSigno ms = new ManejadorSigno();
+        this.signo.addActionListener(ms);
     }
 
     /**
@@ -364,13 +367,13 @@ public class Calculadora extends javax.swing.JFrame {
             JButton btn = (JButton) e.getSource();
             String screen = pantalla.getText(), operador = "", salida = "";
             int oper, pos;
-            
+
             if (allowNumber) {
-                
+
                 if (screen.equals("0") || (screen.equals(""))) {
-                
+
                     salida = btn.getText();
-                
+
                 } else {
 
                     //cambio por metodo propio de la clase principal
@@ -387,9 +390,9 @@ public class Calculadora extends javax.swing.JFrame {
 
                         if (pos + 1 <= calculo.length()) {
                             calculo = calculo.substring(pos + 1);
-            
+
                             if (calculo.equals("0")) {
-            
+
                                 calculo = calculo.replace("0", btn.getText());
                             } else {
                                 calculo += btn.getText();
@@ -404,11 +407,11 @@ public class Calculadora extends javax.swing.JFrame {
                 }
                 if (salida.equals("")) {
                     salida = screen + btn.getText();
-            
+
                 }
 
             } else {
-            
+
                 //**********************************
                 ManejadorClear mc = new ManejadorClear();
                 mc.actionPerformed(e);
@@ -418,7 +421,7 @@ public class Calculadora extends javax.swing.JFrame {
                 allowNumber = true;//ya que reemplaza al numero que hubiese y permite escribir mas numeros
 
             }
-            
+
             pantalla.setText(salida);
 
         }
@@ -444,86 +447,83 @@ public class Calculadora extends javax.swing.JFrame {
             boolean limpiar = false;
             calculo = pantalla.getText();
             //***********************************
-            
-            if(calculo.equals("")){
-            int[] data = operacion(calculo);
-            oper = data[0]; //tipo de operacion 
-            pos = data[1]; //indice donde se encuentra el simbolo de la operacion
-            
-            
-            if (pos != -1) {
+
+            if (calculo.equals("")) {
+                int[] data = operacion(calculo);
+                oper = data[0]; //tipo de operacion 
+                pos = data[1]; //indice donde se encuentra el simbolo de la operacion
+
+                if (pos != -1) {
                 //si llega aqui es porque se contiene un operador pero se presiono otro
-                //asi se que realiza el cambio de operador
-                if ((pos+1) == calculo.length()) {
-                    
-                    a = Double.parseDouble(calculo.replace(operadores(oper), ""));
-                    
-                    calculo = calculo.replace(operadores(oper), btn.getText());
-            
-                    
-                } else {
-            
-                     
-                    if (oper!=-1) {
-                
-                    datas = calculo.split(operando(oper));
-                    b = Double.parseDouble(datas[1]);
+                    //asi se que realiza el cambio de operador
+                    if ((pos + 1) == calculo.length()) {
 
-                    switch (oper) {
-                        case 0:
-                            a += b;
-                            calculo = a + "";
+                        a = Double.parseDouble(calculo.replace(operadores(oper), ""));
 
-                            break;
-                        case 1:
-                            a -= b;
-                            calculo = a + "";
+                        calculo = calculo.replace(operadores(oper), btn.getText());
 
-                            break;
-                        case 2:
-                            a *= b;
-                            calculo = a + "";
+                    } else {
 
-                            break;
-                        case 3:
-                            if (b == 0) {
-                                calculo ="No se puede Divir entre 0 ";
-                                pantalla.setText("No se puede Divir entre 0 ");
-                                limpiar = true;
-                            } else {
+                        if (oper != -1) {
 
-                                a /= b;
-                                calculo = a + "";
+                            datas = calculo.split(operando(oper));
+                            b = Double.parseDouble(datas[1]);
+
+                            switch (oper) {
+                                case 0:
+                                    a += b;
+                                    calculo = a + "";
+
+                                    break;
+                                case 1:
+                                    a -= b;
+                                    calculo = a + "";
+
+                                    break;
+                                case 2:
+                                    a *= b;
+                                    calculo = a + "";
+
+                                    break;
+                                case 3:
+                                    if (b == 0) {
+                                        calculo = "No se puede Divir entre 0 ";
+                                        pantalla.setText("No se puede Divir entre 0 ");
+                                        limpiar = true;
+                                    } else {
+
+                                        a /= b;
+                                        calculo = a + "";
+                                    }
+
+                                    break;
+
                             }
-
-                            break;
+                        }
+                        calculo += btn.getText();
 
                     }
-                }
+                } else {
+                    a = Double.parseDouble(calculo);
+
                     calculo += btn.getText();
-            
                 }
-            } else {
-                a = Double.parseDouble(calculo);
-                 
-                   calculo += btn.getText();
-            }
 
-            pantalla.setText(calculo);
-            if(limpiar){
+                pantalla.setText(calculo);
+                if (limpiar) {
                 //se limpiean todas las variables
-                //**********************************
-                ManejadorClear mc = new ManejadorClear();
-                mc.actionPerformed(e);
+                    //**********************************
+                    ManejadorClear mc = new ManejadorClear();
+                    mc.actionPerformed(e);
                 //para que limpie todo cuando se escribe de nuevo
-                //***********************************
-                pantalla.setText("No se puede Divir entre 0 ");
-                allowNumber=false;
-            }
+                    //***********************************
+                    pantalla.setText("No se puede Divir entre 0 ");
+                    allowNumber = false;
+                }
 
-            }else{
-                pantalla.setText("0"+btn.getText());
-                        
+            } else {
+                pantalla.setText("0" + btn.getText());
+
             }
         }
 
@@ -585,7 +585,7 @@ public class Calculadora extends javax.swing.JFrame {
             allowNumber = false; //para que no permita escribir otro numero
             allowPoint = false; // ya que la respuesta trae punto
             calculo = pantalla.getText();
-            boolean limpiar=false;
+            boolean limpiar = false;
 
             if (calculo.charAt(calculo.length() - 1) == '.') {
                 calculo = calculo.replace(".", "");
@@ -625,8 +625,8 @@ public class Calculadora extends javax.swing.JFrame {
                             a *= b;
                             break;
                         case 3:
-                             if (b == 0) {
-                                calculo ="No se puede Divir entre 0 ";
+                            if (b == 0) {
+                                calculo = "No se puede Divir entre 0 ";
                                 pantalla.setText("No se puede Divir entre 0 ");
                                 limpiar = true;
                             } else {
@@ -636,18 +636,18 @@ public class Calculadora extends javax.swing.JFrame {
                             }
                             break;
                     }
-                    if(!limpiar){
-                    calculo = a + "";
+                    if (!limpiar) {
+                        calculo = a + "";
                     }
                 }
 
             }
 
-            if (((calculo.indexOf(".") + 5) < calculo.length())&&(!limpiar)) {
+            if (((calculo.indexOf(".") + 5) < calculo.length()) && (!limpiar)) {
                 calculo = calculo.substring(0, calculo.indexOf(".") + 5);
             }
             pantalla.setText(calculo);
-            if(limpiar){
+            if (limpiar) {
                 //se limpiean todas las variables
                 //**********************************
                 ManejadorClear mc = new ManejadorClear();
@@ -655,8 +655,8 @@ public class Calculadora extends javax.swing.JFrame {
                 //para que limpie todo cuando se escribe de nuevo
                 //***********************************
                 pantalla.setText("No se puede Divir entre 0 ");
-                allowNumber=false;
-                        
+                allowNumber = false;
+
             }
 //            pantalla.setText(calculo);
 
@@ -678,24 +678,49 @@ public class Calculadora extends javax.swing.JFrame {
         }
 
     }
-    
-    public class ManejadorDelete implements ActionListener{
+
+    public class ManejadorDelete implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-         
+
             calculo = pantalla.getText();
-            
-            if(calculo.length()>=2){
-            calculo = calculo.substring(0,calculo.length()-1);
-            }else{
+
+            if (calculo.length() >= 2) {
+                calculo = calculo.substring(0, calculo.length() - 1);
+            } else {
                 calculo = "";
             }
             pantalla.setText(calculo);
-            
+
         }
-        
+
     }
-    
-    
+
+    public class ManejadorSigno implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            calculo = pantalla.getText();
+
+            int[] datas = operacion(calculo);
+            int oper = datas[0];
+            int pos = datas[1];
+
+            if (oper != -1) {
+
+            } else {
+                a = Double.parseDouble(calculo);
+                System.out.println("Valor de a: "+a);
+                a *= -1;
+                System.out.println("Valor despues a: "+a);
+                calculo = a + "";
+
+            }
+        
+        pantalla.setText(calculo);
+        }
+
+    }
+
 }
