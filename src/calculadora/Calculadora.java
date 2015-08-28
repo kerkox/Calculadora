@@ -443,15 +443,22 @@ public class Calculadora extends javax.swing.JFrame {
             int pos = 0, oper = 0;
             double tmp = 0;
             String[] datas = {};
-            JButton btn = (JButton) e.getSource();
+            JButton btn = (JButton) e.getSource(); 
             boolean limpiar = false;
             calculo = pantalla.getText();
+            System.out.println("valor de calculo: "+calculo);
             //***********************************
-
-            if (calculo.equals("")) {
-                int[] data = operacion(calculo);
+            int[] data = operacion(calculo);
                 oper = data[0]; //tipo de operacion 
                 pos = data[1]; //indice donde se encuentra el simbolo de la operacion
+
+            if (calculo.equals("")) {
+                pantalla.setText("0"+btn.getText());
+            }else if(pos!=-1){
+                
+//                int[] data = operacion(calculo);
+//                oper = data[0]; //tipo de operacion 
+//                pos = data[1]; //indice donde se encuentra el simbolo de la operacion
 
                 if (pos != -1) {
                 //si llega aqui es porque se contiene un operador pero se presiono otro
@@ -522,7 +529,10 @@ public class Calculadora extends javax.swing.JFrame {
                 }
 
             } else {
-                pantalla.setText("0" + btn.getText());
+                a = Double.parseDouble(calculo);
+
+                    calculo += btn.getText();
+                pantalla.setText(calculo);
 
             }
         }
