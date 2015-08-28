@@ -16,13 +16,41 @@ import javax.swing.JButton;
 public class Calculadora extends javax.swing.JFrame {
 
     /**
-     * Creates new form Calculadora
+     * Creates new form Calculadora operando valores para hacer el split por
+     * JAVA PATTERN operadores caracteres de las operaciones + - * /
+     */
+    /**
+     * operando valores para hacer el split por JAVA PATTERN operadores
+     * caracteres de las operaciones + - * /
      */
     boolean allowPoint = true;
-    String[] operando = {"\\+", "-", "\\*", "/"};
-    String[] operadores = {"+", "-", "*", "/"};
+    boolean allowNumber = true;
+
+    String[] operando = {"\\+", "-", "\\*", "/"};//operando valores para hacer el split por JAVA PATTERN
+    String[] operadores = {"+", "-", "*", "/"}; //operadores caracteres de las operaciones + - * /
     String calculo = "";
     double a = 0, b = 0, resultado = 0;
+
+    /**
+     *
+     * @param index valores de 0 a 3
+     * @return operadores caracteres de las operaciones + - * /
+     */
+    public String operadores(int index) {
+        String[] operadores = {"+", "-", "*", "/"};
+        return operadores[index];
+    }
+
+    /**
+     *
+     * @param index valores de 0 a 3
+     * @return operando valores para hacer el split por JAVA PATTERN por los
+     * caracteres reservados como especiales osea \\+ - \\* /
+     */
+    public String operando(int index) {
+        String[] operando = {"\\+", "-", "\\*", "/"};//operando valores para hacer el split por JAVA PATTERN
+        return operando[index];
+    }
 
     public Calculadora() {
         initComponents();
@@ -53,6 +81,9 @@ public class Calculadora extends javax.swing.JFrame {
         //*****************************************
         ManejadorClear mc = new ManejadorClear();
         this.clear.addActionListener(mc);
+        //*****************************************
+        ManejadorDelete md = new ManejadorDelete();
+        this.Delete.addActionListener(md);
     }
 
     /**
@@ -65,14 +96,14 @@ public class Calculadora extends javax.swing.JFrame {
         int pos = -1, operador = -1;
         //Aqui se busca el operador que hay en la pantalla
         for (int i = 0; i < 4; i++) {
-            if (formula.contains(operadores[i])) {
+            if (formula.contains(operadores(i))) {
                 operador = i;
                 break;
             }
 
         }
         if (operador != -1) {
-            pos = formula.indexOf(operadores[operador]);
+            pos = formula.indexOf(operadores(operador));
         }
         int[] datos = {operador, pos};
         return datos;
@@ -180,46 +211,44 @@ public class Calculadora extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(pantalla)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(boton7, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(boton8, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(boton9, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(botonDivi, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(clear, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(boton1, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(boton2, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(boton3, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(botonResta, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(Delete, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(boton4, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(boton5, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(boton6, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(botonMulti, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(signo, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(boton0, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(botonIgual, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(botonPunto, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(botonSuma, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addComponent(boton0, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(botonIgual, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(botonPunto, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(botonSuma, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 79, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(boton7, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(boton8, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(boton9, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(botonDivi, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(clear, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(boton4, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(boton5, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(boton6, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(botonMulti, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(signo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(boton1, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(boton2, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(boton3, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(botonResta, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(Delete, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -240,9 +269,7 @@ public class Calculadora extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(62, 62, 62)
                         .addComponent(botonDivi, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(62, 62, 62)
-                        .addComponent(clear, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(clear, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(boton4, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -335,16 +362,64 @@ public class Calculadora extends javax.swing.JFrame {
         public void actionPerformed(ActionEvent e) {
 
             JButton btn = (JButton) e.getSource();
-            String n = pantalla.getText();
+            String screen = pantalla.getText(), operador = "", salida = "";
+            int oper, pos;
+            
+            if (allowNumber) {
+                
+                if (screen.equals("0") || (screen.equals(""))) {
+                
+                    salida = btn.getText();
+                
+                } else {
 
-            if (n.equals("0")) {
+                    //cambio por metodo propio de la clase principal
+                    //######################################################
+                    calculo = btn.getText();
+                    int[] data = operacion(screen);
+                    oper = data[0];
+                    pos = data[1];
 
-                pantalla.setText(btn.getText());
+                    if (pos != -1) {
+
+                        operador = operadores(oper);
+                        calculo = screen;
+
+                        if (pos + 1 <= calculo.length()) {
+                            calculo = calculo.substring(pos + 1);
+            
+                            if (calculo.equals("0")) {
+            
+                                calculo = calculo.replace("0", btn.getText());
+                            } else {
+                                calculo += btn.getText();
+                            }
+                        } else {
+                            calculo = btn.getText();
+                        }
+                        salida = screen.substring(0, pos + 1) + calculo;
+
+                    }
+
+                }
+                if (salida.equals("")) {
+                    salida = screen + btn.getText();
+            
+                }
 
             } else {
-                pantalla.setText(n + btn.getText());
+            
+                //**********************************
+                ManejadorClear mc = new ManejadorClear();
+                mc.actionPerformed(e);
+                //para que limpie todo cuando se escribe de nuevo
+                //***********************************
+                salida = btn.getText();
+                allowNumber = true;//ya que reemplaza al numero que hubiese y permite escribir mas numeros
 
             }
+            
+            pantalla.setText(salida);
 
         }
 
@@ -358,74 +433,98 @@ public class Calculadora extends javax.swing.JFrame {
         @Override
         public void actionPerformed(ActionEvent e) {
 
+            allowPoint = true;
+            allowNumber = true;
             //*********************************
             //calculo anterior
             int pos = 0, oper = 0;
             double tmp = 0;
             String[] datas = {};
             JButton btn = (JButton) e.getSource();
-            boolean ultimo = false;
+            boolean limpiar = false;
             calculo = pantalla.getText();
-            if (calculo.contains("+") || calculo.contains("-") || calculo.contains("*") || calculo.contains("/")) {
-//                calculo = pantalla.getText();
-                ultimo = true;
-            } else {
-                calculo = pantalla.getText() + btn.getText();
-            }
-
-            //*********************************
+            //***********************************
+            
+            if(calculo.equals("")){
             int[] data = operacion(calculo);
-            oper = data[0];
-            pos = data[1];
-            if (calculo.length() == (pos+1)) {
-                a = Float.parseFloat(calculo.replace(operadores[oper], ""));
-            } else {
-                datas = calculo.split(operando[oper]);
-                b = Float.parseFloat(datas[1]);
-
-
-                switch (oper) {
-                    case 0:
-                        a += b;
-                        calculo = a + "";
-
-                        break;
-                    case 1:
-                        a -= b;
-                        calculo = a + "";
-
-                        break;
-                    case 2:
-                        a *= b;
-                        calculo = a + "";
-
-                        break;
-                    case 3:
-                        if (b == 0) {
-                            pantalla.setText("No se puede Divir entre 0 ");
-                        } else {
-
-                            a /= b;
-                            calculo = a + "";
-                        }
-
-                        break;
-
-                }
-            }
-
-//                //*****************************************
-            if (ultimo) {
-                if (calculo.contains("+") || calculo.contains("-") || calculo.contains("*") || calculo.contains("/")) {
-                    calculo = calculo.substring(0, calculo.length() - 2) + btn.getText();
+            oper = data[0]; //tipo de operacion 
+            pos = data[1]; //indice donde se encuentra el simbolo de la operacion
+            
+            
+            if (pos != -1) {
+                //si llega aqui es porque se contiene un operador pero se presiono otro
+                //asi se que realiza el cambio de operador
+                if ((pos+1) == calculo.length()) {
+                    
+                    a = Double.parseDouble(calculo.replace(operadores(oper), ""));
+                    
+                    calculo = calculo.replace(operadores(oper), btn.getText());
+            
+                    
                 } else {
-                    calculo += btn.getText();
+            
+                     
+                    if (oper!=-1) {
+                
+                    datas = calculo.split(operando(oper));
+                    b = Double.parseDouble(datas[1]);
+
+                    switch (oper) {
+                        case 0:
+                            a += b;
+                            calculo = a + "";
+
+                            break;
+                        case 1:
+                            a -= b;
+                            calculo = a + "";
+
+                            break;
+                        case 2:
+                            a *= b;
+                            calculo = a + "";
+
+                            break;
+                        case 3:
+                            if (b == 0) {
+                                calculo ="No se puede Divir entre 0 ";
+                                pantalla.setText("No se puede Divir entre 0 ");
+                                limpiar = true;
+                            } else {
+
+                                a /= b;
+                                calculo = a + "";
+                            }
+
+                            break;
+
+                    }
                 }
+                    calculo += btn.getText();
+            
+                }
+            } else {
+                a = Double.parseDouble(calculo);
+                 
+                   calculo += btn.getText();
             }
 
             pantalla.setText(calculo);
-            allowPoint = true;
+            if(limpiar){
+                //se limpiean todas las variables
+                //**********************************
+                ManejadorClear mc = new ManejadorClear();
+                mc.actionPerformed(e);
+                //para que limpie todo cuando se escribe de nuevo
+                //***********************************
+                pantalla.setText("No se puede Divir entre 0 ");
+                allowNumber=false;
+            }
 
+            }else{
+                pantalla.setText("0"+btn.getText());
+                        
+            }
         }
 
     }
@@ -440,31 +539,42 @@ public class Calculadora extends javax.swing.JFrame {
             String oper = "";
             JButton btn = (JButton) e.getSource();
             oper = pantalla.getText();
-            if(oper.equals("0")){
-                if (allowPoint) {    
-                    oper += btn.getText();
+
+            if (allowNumber) {
+                if (oper.equals("0")) {
+                    if (allowPoint) {
+                        oper += btn.getText();
+                    }
+                } else {
+
+                    if (allowPoint) {
+                        if (oper.equals("")) {
+                            oper = "0" + btn.getText();
+                        } else {
+                            int[] data = operacion(oper);
+                            int pos = data[1];
+                            if (oper.length() == (pos + 1)) {
+                                oper += "0" + btn.getText();
+                            } else {
+                                oper += btn.getText();
+                            }
+                        }
+
+                    }
                 }
-            }else{
-            
-            if (allowPoint) {
-                if(oper.equals("")){
-                    oper = "0" + btn.getText();
-                }else{
-                    int[] data = operacion(oper);
-                    int pos = data[1];
-                    if(oper.length()==(pos+1)){
-                           oper += "0"+btn.getText();
-                    }else{
-                    oper += btn.getText();
-                }
-                }
-                
-            } 
+            } else {
+                //**********************************
+                ManejadorClear mc = new ManejadorClear();
+                mc.actionPerformed(e);
+                //para que limpie todo cuando se escribe de nuevo
+                //***********************************
+                oper = "0" + btn.getText();
+                allowNumber = true;//ya que reemplaza al numero que hubiese y permite escribir mas numeros
             }
-            
+
             pantalla.setText(oper);
             allowPoint = false;
-        
+
         }
     }
 
@@ -472,8 +582,10 @@ public class Calculadora extends javax.swing.JFrame {
 
         @Override
         public void actionPerformed(ActionEvent e) {
+            allowNumber = false; //para que no permita escribir otro numero
             allowPoint = false; // ya que la respuesta trae punto
             calculo = pantalla.getText();
+            boolean limpiar=false;
 
             if (calculo.charAt(calculo.length() - 1) == '.') {
                 calculo = calculo.replace(".", "");
@@ -499,8 +611,8 @@ public class Calculadora extends javax.swing.JFrame {
 
                     datas = calculo.split(operando[operador]);
 
-                    a = Float.parseFloat(datas[0]);
-                    b = Float.parseFloat(datas[1]);
+                    a = Double.parseDouble(datas[0]);
+                    b = Double.parseDouble(datas[1]);
 
                     switch (operador) {
                         case 0:
@@ -513,16 +625,40 @@ public class Calculadora extends javax.swing.JFrame {
                             a *= b;
                             break;
                         case 3:
-                            a /= b;
+                             if (b == 0) {
+                                calculo ="No se puede Divir entre 0 ";
+                                pantalla.setText("No se puede Divir entre 0 ");
+                                limpiar = true;
+                            } else {
+
+                                a /= b;
+                                calculo = a + "";
+                            }
                             break;
                     }
+                    if(!limpiar){
                     calculo = a + "";
-
+                    }
                 }
 
             }
 
+            if (((calculo.indexOf(".") + 5) < calculo.length())&&(!limpiar)) {
+                calculo = calculo.substring(0, calculo.indexOf(".") + 5);
+            }
             pantalla.setText(calculo);
+            if(limpiar){
+                //se limpiean todas las variables
+                //**********************************
+                ManejadorClear mc = new ManejadorClear();
+                mc.actionPerformed(e);
+                //para que limpie todo cuando se escribe de nuevo
+                //***********************************
+                pantalla.setText("No se puede Divir entre 0 ");
+                allowNumber=false;
+                        
+            }
+//            pantalla.setText(calculo);
 
         }
 
@@ -542,4 +678,24 @@ public class Calculadora extends javax.swing.JFrame {
         }
 
     }
+    
+    public class ManejadorDelete implements ActionListener{
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+         
+            calculo = pantalla.getText();
+            
+            if(calculo.length()>=2){
+            calculo = calculo.substring(0,calculo.length()-1);
+            }else{
+                calculo = "";
+            }
+            pantalla.setText(calculo);
+            
+        }
+        
+    }
+    
+    
 }
