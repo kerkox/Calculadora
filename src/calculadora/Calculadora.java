@@ -26,18 +26,18 @@ public class Calculadora extends javax.swing.JFrame {
     boolean allowPoint = true;
     boolean allowNumber = true;
 
-    String[] operando = {"\\+", "-", "\\*", "/"};//operando valores para hacer el split por JAVA PATTERN
-    String[] operadores = {"+", "-", "*", "/"}; //operadores caracteres de las operaciones + - * /
+    String[] operando = {"\\+", "--", "\\*", "/"};//operando valores para hacer el split por JAVA PATTERN
+    String[] operadores = {"+", "--", "*", "/"}; //operadores caracteres de las operaciones + - * /
     String calculo = "";
     double a = 0, b = 0, resultado = 0;
 
     /**
      *
      * @param index valores de 0 a 3
-     * @return operadores caracteres de las operaciones + - * /
+     * @return operadores caracteres de las operaciones + -- * /
      */
     public String operadores(int index) {
-        String[] operadores = {"+", "-", "*", "/"};
+        String[] operadores = {"+", "--", "*", "/"};
         return operadores[index];
     }
 
@@ -45,10 +45,10 @@ public class Calculadora extends javax.swing.JFrame {
      *
      * @param index valores de 0 a 3
      * @return operando valores para hacer el split por JAVA PATTERN por los
-     * caracteres reservados como especiales osea \\+ - \\* /
+     * caracteres reservados como especiales osea \\+ -- \\* /
      */
     public String operando(int index) {
-        String[] operando = {"\\+", "-", "\\*", "/"};//operando valores para hacer el split por JAVA PATTERN
+        String[] operando = {"\\+", "--", "\\*", "/"};//operando valores para hacer el split por JAVA PATTERN
         return operando[index];
     }
 
@@ -144,6 +144,7 @@ public class Calculadora extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        pantalla.setEditable(false);
         pantalla.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         pantalla.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         pantalla.setText("0");
@@ -161,7 +162,7 @@ public class Calculadora extends javax.swing.JFrame {
         botonDivi.setText("/");
 
         botonResta.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        botonResta.setText("-");
+        botonResta.setText("--");
 
         boton3.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         boton3.setText("3");
@@ -443,25 +444,24 @@ public class Calculadora extends javax.swing.JFrame {
             int pos = 0, oper = 0;
             double tmp = 0;
             String[] datas = {};
-            JButton btn = (JButton) e.getSource(); 
+            JButton btn = (JButton) e.getSource();
             boolean limpiar = false;
             calculo = pantalla.getText();
-            System.out.println("valor de calculo: "+calculo);
+
             //***********************************
             int[] data = operacion(calculo);
-                oper = data[0]; //tipo de operacion 
-                pos = data[1]; //indice donde se encuentra el simbolo de la operacion
+            oper = data[0]; //tipo de operacion 
+            pos = data[1]; //indice donde se encuentra el simbolo de la operacion
 
             if (calculo.equals("")) {
-                pantalla.setText("0"+btn.getText());
-            }else if(pos!=-1){
-                
+                pantalla.setText("0" + btn.getText());
+            } else if (pos != -1) {
+
 //                int[] data = operacion(calculo);
 //                oper = data[0]; //tipo de operacion 
 //                pos = data[1]; //indice donde se encuentra el simbolo de la operacion
-
                 if (pos != -1) {
-                //si llega aqui es porque se contiene un operador pero se presiono otro
+                    //si llega aqui es porque se contiene un operador pero se presiono otro
                     //asi se que realiza el cambio de operador
                     if ((pos + 1) == calculo.length()) {
 
@@ -518,11 +518,11 @@ public class Calculadora extends javax.swing.JFrame {
 
                 pantalla.setText(calculo);
                 if (limpiar) {
-                //se limpiean todas las variables
+                    //se limpiean todas las variables
                     //**********************************
                     ManejadorClear mc = new ManejadorClear();
                     mc.actionPerformed(e);
-                //para que limpie todo cuando se escribe de nuevo
+                    //para que limpie todo cuando se escribe de nuevo
                     //***********************************
                     pantalla.setText("No se puede Divir entre 0 ");
                     allowNumber = false;
@@ -531,7 +531,7 @@ public class Calculadora extends javax.swing.JFrame {
             } else {
                 a = Double.parseDouble(calculo);
 
-                    calculo += btn.getText();
+                calculo += btn.getText();
                 pantalla.setText(calculo);
 
             }
@@ -712,25 +712,27 @@ public class Calculadora extends javax.swing.JFrame {
         @Override
         public void actionPerformed(ActionEvent e) {
             calculo = pantalla.getText();
+            if (!calculo.equals("")) {
 
-            int[] datas = operacion(calculo);
-            int oper = datas[0];
-            int pos = datas[1];
+                int[] datas = operacion(calculo);
+                int oper = datas[0];
+                int pos = datas[1];
 
-            if (oper != -1) {
+                if (oper != -1) {
 
-            } else {
-                a = Double.parseDouble(calculo);
-                System.out.println("Valor de a: "+a);
-                a *= -1;
-                System.out.println("Valor despues a: "+a);
-                calculo = a + "";
+                } else {
+                    a = Double.parseDouble(calculo);
 
+                    a *= -1;
+
+                    calculo = a + "";
+
+                }
+
+                pantalla.setText(calculo);
             }
-        
-        pantalla.setText(calculo);
+
         }
 
     }
-
 }
