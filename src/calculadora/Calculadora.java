@@ -380,7 +380,16 @@ public class Calculadora extends javax.swing.JFrame {
                     //cambio por metodo propio de la clase principal
                     //######################################################
                     calculo = btn.getText();
-                    int[] data = operacion(screen);
+                    int[] data = operacion(screen); 
+                    /*
+                    int[] data = operacion(screen); 
+                    esto devuelve si la pantalla tiene un signo de operacion 
+                    si no es asi el valor que devuelve es -1
+                    si la pantalla tiene un signo de operacion entonces devuelve:
+                    - el tipo de operacion (de  0 3 ): 0= suma(+), 1=resta(-), 2=multiplicacion(*) 3=division(/)
+                    - y el indice donde se encuentra el signo de operacion
+                    */
+                    
                     oper = data[0];
                     pos = data[1];
 
